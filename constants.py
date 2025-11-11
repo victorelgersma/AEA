@@ -1,0 +1,7 @@
+
+AREA = 12 #km^2
+
+POWER_CAPACITY = 10 # MW
+
+LOAD_FACTOR = 0.9 
+

@@ -1,0 +1,7 @@
+flowchart LR
+    NGCC["NGCC Turbine"]
+    COMP["CO₂ Compressors"]
+    GRID["Electricity Grid"]
+
+    NGCC -- "⚡ Electricity (internal)" --> COMP
+    NGCC -- "⚡ Electricity (export)" --> GRID

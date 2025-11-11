@@ -1,0 +1,82 @@
+flowchart LR
+    %% ============================
+    %% External Systems (outside)
+    %% ============================
+    ENV["Environment"]
+    GAS_GRID["Natural Gas Grid"]
+    ELEC_GRID["Electricity Grid"]
+    STEAM["Steam supply<br/>from Industrial Complex"]
+    EXTRA_CO2["Optional CO₂ supply<br/>from Industrial Complex"]
+
+    %% ============================
+    %% System Boundary
+    %% ============================
+    subgraph SYS["System 1 — NGCC + CCS + ECBM"]
+        direction LR
+
+        %% --- Subsystems ---
+        subgraph CoalBed["Deep Coal Seam (ECBM)"]
+            A_COAL["Coal seam<br/>(adsorbs CO₂, releases CH₄ + CO₂ + H₂O)"]
+        end
+
+        subgraph GasProcessing["Gas Cleaning & Purification"]
+            W_FILTER["Water removal"]
+            GAS_PUR["CH₄/CO₂ separation & purification"]
+        end
+
+        subgraph NGCC["Natural Gas Combined Cycle (NGCC)"]
+            TURB["Gas turbine<br/>(CH₄ → electricity + flue gas)"]
+            CAPTURE["Amine CO₂ capture<br/>(steam input)"]
+        end
+
+        subgraph CCS["CO₂ Compression & Injection"]
+            COMP["Multi-stage CO₂ compression"]
+            INJ["Injection well"]
+        end
+    end
+
+    %% ============================
+    %% Flows (with labels)
+    %% ============================
+
+    %% Coal seam → gas processing
+    A_COAL -- "CH₄ + CO₂ + H₂O" --> W_FILTER
+    W_FILTER -- "H₂O → discharge" --> ENV
+    W_FILTER -- "Dry gas" --> GAS_PUR
+
+    %% Gas purification
+    GAS_PUR -- "CH₄ (fuel gas)" --> TURB
+    GAS_PUR -- "Separated CO₂" --> COMP
+
+    %% NGCC + Capture
+    TURB -- "Flue gas (CO₂)" --> CAPTURE
+    TURB -- "Electricity" --> ELEC_GRID
+    CAPTURE -- "Captured CO₂" --> COMP
+    STEAM -- "Steam for solvent regeneration" --> CAPTURE
+
+    %% Compression + Injection
+    COMP -- "Compressed CO₂" --> INJ
+    INJ -- "CO₂ → coal seam" --> A_COAL
+
+    %% Optional external feeds
+    GAS_GRID -- "Supplementary CH₄" --> TURB
+    EXTRA_CO2 -- "Additional CO₂ (1 bar)" --> COMP
+
+    %% ============================
+    %% Styling
+    %% ============================
+    %% Subsystem colors (inside boundary)
+    style CoalBed fill:#2E7D32,stroke:#1B5E20,color:#fff
+    style GasProcessing fill:#1565C0,stroke:#0D47A1,color:#fff
+    style NGCC fill:#EF6C00,stroke:#E65100,color:#fff
+    style CCS fill:#6A1B9A,stroke:#4A148C,color:#fff
+
+    %% System boundary (dashed line)
+    style SYS stroke-dasharray: 8 6,stroke:#000,fill:none
+
+    %% External systems (light gray)
+    style ENV fill:#E0E0E0,stroke:#9E9E9E,color:#000
+    style GAS_GRID fill:#E0E0E0,stroke:#9E9E9E,color:#000
+    style ELEC_GRID fill:#E0E0E0,stroke:#9E9E9E,color:#000
+    style STEAM fill:#E0E0E0,stroke:#9E9E9E,color:#000
+    style EXTRA_CO2 fill:#E0E0E0,stroke:#9E9E9E,color:#000

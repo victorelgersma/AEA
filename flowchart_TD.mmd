@@ -1,0 +1,39 @@
+flowchart TD
+    %% Nodes
+        A("Coal Bed")
+        B("Electricity Grid")
+        C("Gas Grid")
+        D("Environment")
+        E("Water Filter")
+        F("Purification")
+        G("NGCC")
+        H("CCS")
+        I("Compressor 1")
+        J("Compressor 2")
+        K("Compressor 3")
+        L("Nearby Industrial Unit")
+
+    %% Style nodes  node styling. Try the visual editor toolbar for easier styling!
+        style E color:#FFFFFF, fill:#2962FF, stroke:#AA00FF
+        style F color:#FFFFFF, fill:#2962FF, stroke:#AA00FF
+        style G color:#FFFFFF, fill:#2962FF, stroke:#AA00FF
+        style H color:#FFFFFF, fill:#2962FF, stroke:#AA00FF
+        style I color:#FFFFFF, fill:#2962FF, stroke:#AA00FF
+        style J color:#FFFFFF, fill:#2962FF, stroke:#AA00FF
+        style K color:#FFFFFF, fill:#2962FF, stroke:#AA00FF
+        
+
+    %% Edge connections between nodes
+        E -- H2O --> D
+        E -- CO2+ methane --> F
+        F -- CO2 --> K -- CO2 --> A
+        F -- methane --> G -- Flue --> H 
+        L -- CO2 --> I -- CO2 --> A -- CH4, CO2, H2O --> E 
+        H -- CO2 --> J
+        G -- heat --> F
+        H -- Flue ex CO2 --> D
+        L -- Steam --> H
+        J -- CO2 --> A
+        G -- Electricity -->  B
+        C -- Methane --> G
+    %% You can add notes with two "%" signs in a row!
