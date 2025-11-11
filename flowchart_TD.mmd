@@ -1,39 +1,34 @@
-flowchart TD
-    %% Nodes
-        A("Coal Bed")
-        B("Electricity Grid")
-        C("Gas Grid")
-        D("Environment")
-        E("Water Filter")
-        F("Purification")
-        G("NGCC")
-        H("CCS")
-        I("Compressor 1")
-        J("Compressor 2")
-        K("Compressor 3")
-        L("Nearby Industrial Unit")
+flowchart RL
+  %% ===== Subgraph: External Environment =====
+  subgraph EXT[" "]
+    ENV["Environment"]
+    BED["Coal Bed"]
+    EGRID["Electricity Grid"]
+    GGRID["Gas Grid"]
+    IND["Nearby Industrial Unit"]
+  end
 
-    %% Style nodes  node styling. Try the visual editor toolbar for easier styling!
-        style E color:#FFFFFF, fill:#2962FF, stroke:#AA00FF
-        style F color:#FFFFFF, fill:#2962FF, stroke:#AA00FF
-        style G color:#FFFFFF, fill:#2962FF, stroke:#AA00FF
-        style H color:#FFFFFF, fill:#2962FF, stroke:#AA00FF
-        style I color:#FFFFFF, fill:#2962FF, stroke:#AA00FF
-        style J color:#FFFFFF, fill:#2962FF, stroke:#AA00FF
-        style K color:#FFFFFF, fill:#2962FF, stroke:#AA00FF
-        
+  %% ===== Subgraph: System =====
+  subgraph SYS["System 1"]
+    F["NGCC"]
+    WAT["Water Filter"]
+    H["Compressor"]
+    CCS["CCS"]
+  end
 
-    %% Edge connections between nodes
-        E -- H2O --> D
-        E -- CO2+ methane --> F
-        F -- CO2 --> K -- CO2 --> A
-        F -- methane --> G -- Flue --> H 
-        L -- CO2 --> I -- CO2 --> A -- CH4, CO2, H2O --> E 
-        H -- CO2 --> J
-        G -- heat --> F
-        H -- Flue ex CO2 --> D
-        L -- Steam --> H
-        J -- CO2 --> A
-        G -- Electricity -->  B
-        C -- Methane --> G
-    %% You can add notes with two "%" signs in a row!
+  %% ===== Flows between subsystems =====
+  BED -- "CO2 + CH4 + H2O" --> WAT
+  WAT -- "H2O" --> ENV
+  WAT -- "CO2 + CH4" --> GGRID
+  WAT -- "CO2 + CH4" --> F
+  GGRID -- "CH4" --> F
+  F --> EGRID
+  CCS -- "CO2" --> H -- "CO2, compressed" --> BED
+  F -- "N2 + O2 + H2O + CO2" --> CCS -- "N2 + O2 + H2O" --> ENV
+  IND -- "Steam" --> CCS
+
+  %% ===== Styling =====
+  style SYS fill:#1E3A8A,stroke:#60A5FA,stroke-width:2px,rx:10px,ry:10px,color:#E0F2FE
+  style EXT fill:none,stroke:none
+  classDef node fill:#1E293B,stroke:#60A5FA,color:#E0F2FE
+  class F,WAT,H,CCS,ENV,BED,EGRID,GGRID,IND node
