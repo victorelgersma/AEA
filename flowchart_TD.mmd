@@ -1,34 +1,31 @@
 flowchart RL
-  %% ===== Subgraph: External Environment =====
-  subgraph EXT[" "]
+  %% ===== Subgraph: System =====
+  subgraph SYS["System 1"]
+    F["NGCC"]
+    WAT["Water Filter"]
+    COM["Compressor"]
+    CCS["CCS"]
+  end
     ENV["Environment"]
     BED["Coal Bed"]
     EGRID["Electricity Grid"]
     GGRID["Gas Grid"]
     IND["Nearby Industrial Unit"]
-  end
-
-  %% ===== Subgraph: System =====
-  subgraph SYS["System 1"]
-    F["NGCC"]
-    WAT["Water Filter"]
-    H["Compressor"]
-    CCS["CCS"]
-  end
 
   %% ===== Flows between subsystems =====
   BED -- "CO2 + CH4 + H2O" --> WAT
-  WAT -- "H2O" --> ENV
+  WAT -- "H2O" --- ENV
   WAT -- "CO2 + CH4" --> GGRID
   WAT -- "CO2 + CH4" --> F
-  GGRID -- "CH4" --> F
-  F --> EGRID
-  CCS -- "CO2" --> H -- "CO2, compressed" --> BED
-  F -- "N2 + O2 + H2O + CO2" --> CCS -- "N2 + O2 + H2O" --> ENV
-  IND -- "Steam" --> CCS
+  GGRID -- "CH4" --- F
+  F --⚡--> EGRID
+  CCS -- "CO2" --> COM -- "CO2, compressed" --> BED
+  F -- "flue gas" --- CCS 
+  IND -- "steam" ---> CCS
+  IND -- "CO2" ---> COM
+
 
   %% ===== Styling =====
-  style SYS fill:#1E3A8A,stroke:#60A5FA,stroke-width:2px,rx:10px,ry:10px,color:#E0F2FE
-  style EXT fill:none,stroke:none
+  style SYS fill:#1E3A8A,stroke:#60A5FA,stroke-width:2px,stroke-dasharray:5 5,rx:10px,ry:10px,color:#E0F2FE
   classDef node fill:#1E293B,stroke:#60A5FA,color:#E0F2FE
   class F,WAT,H,CCS,ENV,BED,EGRID,GGRID,IND node
